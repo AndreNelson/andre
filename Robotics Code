@@ -1,75 +1,119 @@
-int pwm_a=3;
-int pwm_b=11;
-int dir_a=12;
-int dir_b=13;
-int val=0;
+const int pingPin = 9;
+
+  int A = 2;
+  int B = 3; 
+  int C = 4;
+  int D = 5;
+  int E = 6;
+  int F = 7; 
+  int G = 8;
+  int H = 9;
+  int cm = 0;
 
 void setup() {
-  // put your setup code here, to run once:
-pinMode(pwm_a, OUTPUT);
-pinMode(pwm_b, OUTPUT);
-pinMode(dir_a, OUTPUT);
-pinMode(dir_b, OUTPUT);
-analogWrite(pwm_a, 100);
-analogWrite(pwm_b, 100);
+  // initialize serial communication:
+  Serial.begin(9600);
+
+   pinMode(2, OUTPUT);  // channel A  
+  pinMode(3, OUTPUT);  // channel B   
+  pinMode(4, OUTPUT);  // channel C
+  pinMode(5, OUTPUT);  // channel D    
+  pinMode(6, OUTPUT);  // channel E
+  pinMode(7, OUTPUT);  // channel F
+  pinMode(8, OUTPUT);  // channel G
+  pinMode(9, OUTPUT);  // channel H
+   pinMode(13, OUTPUT);
+   pinMode(12, OUTPUT);
+   pinMode(11, OUTPUT);
+   pinMode(10, OUTPUT);
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-forward();
-delay(1000);
-turnleft();
-delay(250);
-forward();
-delay(1500);
-turnright();
-delay(250);
-forward();
-delay(1000);
-turnright();
-delay(250);
-forward();
-delay(4000);
-stopped();
-delay(1000000000);
-}
+  // establish variables for duration of the ping,
+  // and the distance result in inches and centimeters:
+  long duration, inches, cm;
 
-void forward()
-{
-  digitalWrite(dir_a, HIGH);
-  digitalWrite(dir_b, LOW);
-  digitalWrite(pwm_a, 255);
-  digitalWrite(pwm_b, 255);
-}
+  // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
+  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin, LOW);
 
-void backward()
-{
-  digitalWrite(dir_a, LOW);
-  digitalWrite(dir_b, HIGH);
-  digitalWrite(pwm_a, 255);
-  digitalWrite(pwm_b, 255);
-}
+  // The same pin is used to read the signal from the PING))): a HIGH
+  // pulse whose duration is the time (in microseconds) from the sending
+  // of the ping to the reception of its echo off of an object.
+  pinMode(pingPin, INPUT);
+  duration = pulseIn(pingPin, HIGH);
 
-void stopped()
-{
-  digitalWrite(dir_a, LOW);
-  digitalWrite(dir_b, LOW);
-  digitalWrite(pwm_a, 0);
-  digitalWrite(pwm_b, 0);
-}
+  // convert the time into a distance
+  cm = microsecondsToCentimeters(duration);
 
-void turnright()
-{
- digitalWrite(dir_a, LOW);
-  digitalWrite(dir_b, LOW);
-  digitalWrite(pwm_a, 255);
-  digitalWrite(pwm_b, 255); 
-}
+  Serial.print(inches);
+  Serial.print("in, ");
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
 
-void turnleft()
+  delay(100);
+
+if (cm <= 150)
 {
- digitalWrite(dir_a, HIGH);
-  digitalWrite(dir_b, HIGH);
-  digitalWrite(pwm_a, 255);
-  digitalWrite(pwm_b, 255); 
+digitalWrite(A, HIGH);
+  delay(500);
+    digitalWrite(A, LOW);
+    
+  digitalWrite(B, HIGH);
+   delay(500);
+    digitalWrite(B, LOW);
+    
+  digitalWrite(C, HIGH);
+   delay(500);
+    digitalWrite(C, LOW);
+  
+  digitalWrite(D, HIGH);
+   delay(500);
+    digitalWrite(D, LOW);
+  
+  digitalWrite(E, HIGH);
+     delay(500);
+    digitalWrite(E, LOW);
+  
+  digitalWrite(F, HIGH);
+  delay(500);
+    digitalWrite(F, LOW);
+    
+  digitalWrite(G, HIGH);
+  delay(500);
+    digitalWrite(G, LOW);
+    
+  digitalWrite(H, HIGH);
+  delay(500);
+    digitalWrite(H, LOW);
+
+    digitalWrite(13, HIGH);
+  delay(500);
+    digitalWrite(13, LOW);
+
+     digitalWrite(12, HIGH);
+  delay(500);
+    digitalWrite(12, LOW);
+
+     digitalWrite(11, HIGH);
+  delay(500);
+    digitalWrite(11, LOW);
+
+     digitalWrite(10, HIGH);
+  delay(500);
+    digitalWrite(10, LOW);
+}
+}
+long microsecondsToCentimeters(long microseconds) {
+  // The speed of sound is 340 m/s or 29 microseconds per centimeter.
+  // The ping travels out and back, so to find the distance of the
+  // object we take half of the distance travelled.
+  return microseconds / 29 / 2;
 }
